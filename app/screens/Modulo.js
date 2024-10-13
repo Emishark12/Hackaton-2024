@@ -6,9 +6,6 @@ import Theme from '../constants/Theme';
 const Modulo = ({ navigation }) => {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [pointsEarned, setPointsEarned] = useState(0);
-  const [responseText, setResponseText] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   const texts = [
     "Bienvenido al curso sobre Finanzas Personales. En este curso, aprenderás los fundamentos de cómo manejar tu dinero de manera efectiva.",
@@ -30,32 +27,6 @@ const Modulo = ({ navigation }) => {
     navigation.goBack();
   };
 
-  const handleFetchContent = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await fetch('http://192.168.51.157:3000/generate-content', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ message: Theme.storyMessage.message }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Error fetching data');
-      }
-
-      const data = await response.json();
-      setResponseText(data.responseText.parts[0].text);
-    } catch (err) {
-      setError('Error fetching content. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity onPress={backHandler} style={styles.backButton}>
@@ -68,26 +39,11 @@ const Modulo = ({ navigation }) => {
       )}
       <View style={styles.buttonContainer}>
         {currentTextIndex === texts.length - 1 ? (
-          <Button title="Mi historia" onPress={handleFetchContent} color="#EB0029" />
+          <Button title="Mi historia" onPress={() => navigation.navigate('Historia')} color="#EB0029" />
         ) : (
           <Button title="Continuar" onPress={continueHandler} color="#EB0029" />
         )}
       </View>
-
-      {loading && (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size="large" color="#0000ff" />
-          <Text style={styles.loadingText}>Estamos generando tu historia personalizada, por favor espera un momento</Text>
-        </View>
-      )}
-
-      {error && <Text style={styles.error}>{error}</Text>}
-      {responseText && (
-        <View style={styles.responseContainer}>
-          <Text style={styles.responseTitle}>Historia Generada:</Text>
-          <Text style={styles.responseText}>{responseText}</Text>
-        </View>
-      )}
     </ScrollView>
   );
 };
@@ -119,36 +75,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     color: 'green',
     fontWeight: 'bold',
-  },
-  loadingContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: '#333',
-  },
-  responseContainer: {
-    marginTop: 20,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: '#EB0029',
-    borderRadius: 5,
-    backgroundColor: '#f9f9f9',
-  },
-  responseTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-  },
-  responseText: {
-    fontSize: 16,
-    color: '#333',
-  },
-  error: {
-    color: 'red',
-    marginTop: 20,
   },
 });
 

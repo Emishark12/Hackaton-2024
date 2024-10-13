@@ -10,6 +10,7 @@ import OnboardingScreen from "../screens/RegisterScreen";
 import ProfileScreen from "../screens/Profile";
 import ConfiguracionScreen from "../screens/Configuracion";
 import FinancialCoachScreen from "../screens/FinancialCoach";
+import Historia from "../screens/Historia"; // Adjust the path as needed
 import Cursos from "../screens/Cursos";
 import Curso from "../screens/Curso";
 import PlacementScreen from "../screens/Placement"; // Import your Placement screen
@@ -117,7 +118,6 @@ function HomeStack(props) {
   );
 }
 
-// New stack for Placement screen
 function PlacementStack(props) {
   return (
     <Stack.Navigator
@@ -134,7 +134,6 @@ function PlacementStack(props) {
   );
 }
 
-// New stack for Modulo screen
 function ModuloStack(props) {
   return (
     <Stack.Navigator
@@ -147,9 +146,14 @@ function ModuloStack(props) {
         name="Modulo"
         component={ModuloScreen}
       />
+      <Stack.Screen
+        name="Historia"
+        component={Historia} // Add the Historia screen here
+      />
     </Stack.Navigator>
   );
 }
+
 
 function AppStack(props) {
   return (
