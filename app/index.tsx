@@ -35,7 +35,7 @@ const assetImages: (string | number)[] = [
 // cache product images
 products.map((product) => assetImages.push(product.image));
 
-function cacheImages(images: (string | number)[]): Promise<void[]> {
+function cacheImages(images: (string | number)[]): Promise<(boolean | Asset)[]> {
   return Promise.all(
     images.map((image) => {
       if (typeof image === "string") {
@@ -46,6 +46,10 @@ function cacheImages(images: (string | number)[]): Promise<void[]> {
     })
   );
 }
+
+const loadResourcesAsync = async () => {
+  return Promise.all([...cacheImages(assetImages)]);
+};
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -64,10 +68,6 @@ export default function App() {
     }
     prepare();
   }, []);
-
-  const loadResourcesAsync = async () => {
-    return Promise.all([...cacheImages(assetImages)]);
-  };
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {

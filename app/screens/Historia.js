@@ -1,19 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, StyleSheet, Button, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import Theme from '../constants/Theme';
 
-const Historia = ({ navigation }) => {
+const Historia = ({ navigation, route }) => {
+  const { cursoActual } = route.params; // Assuming cursoActual is passed correctly from the previous screen
   const [responseText, setResponseText] = useState('');
   const [loading, setLoading] = useState(true);
   const [loadingConsequences, setLoadingConsequences] = useState(false);
   const [error, setError] = useState(null);
   const [optionsSelected, setOptionsSelected] = useState(false);
 
-  // New state variables
-  const [nombre, setNombre] = useState('Roberto');
-  const [metaFinanciera, setMetaFinanciera] = useState('Comprar una casa');
-  const [cursoActual, setCursoActual] = useState('Seguros e Inversiones');
-  const [rangoEdad, setRangoEdad] = useState('70');
+  // State variables for user data
+  const [nombre, setNombre] = useState('');
+  const [metaFinanciera, setMetaFinanciera] = useState('');
+  const [rangoEdad, setRangoEdad] = useState('');
+
+  // Function to retrieve user data from AsyncStorage
+  const loadUserData = async () => {
+    try {
+      const jsonValue = await AsyncStorage.getItem('userData');
+      if (jsonValue != null) {
+        const userData = JSON.parse(jsonValue);
+        setNombre(userData.name);
+        setMetaFinanciera(userData.goal);
+        setRangoEdad(userData.age);
+      }
+    } catch (error) {
+      console.error('Error loading user data', error);
+    }
+  };
 
   const fetchStoryContent = async () => {
     try {
@@ -22,12 +38,12 @@ const Historia = ({ navigation }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           message: `${Theme.storyMessage.message} 
             Nombre: ${nombre}, 
             Meta Financiera: ${metaFinanciera}, 
-            Curso Actual: ${cursoActual}, 
-            Rango de Edad: ${rangoEdad}` 
+            Curso Actual: ${cursoActual.title},  // Pass the course title here
+            Rango de Edad: ${rangoEdad}`
         }),
       });
 
@@ -45,13 +61,11 @@ const Historia = ({ navigation }) => {
   };
 
   useEffect(() => {
+    loadUserData(); // Load user data when the component mounts
     fetchStoryContent();
-  }, []);
+  }, [nombre, metaFinanciera, rangoEdad, cursoActual]); // Fetch story after loading user data
 
   const handleOptionPress = async (option) => {
-    console.log(`Opción seleccionada: ${option}`);
-    
-    // Show loading message while waiting for the second part
     setLoadingConsequences(true);
     setOptionsSelected(true); // Set options selected to true
 
@@ -61,7 +75,6 @@ const Historia = ({ navigation }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        // Include the user's selection and previous variables
         body: JSON.stringify({
           message: `${responseText} El usuario eligió la opción ${option}. Genera el final de la historia con retroalimentación.`
         }),
@@ -101,7 +114,6 @@ const Historia = ({ navigation }) => {
             </View>
           )}
 
-          {/* Conditionally render buttons or the back button */}
           {!optionsSelected ? (
             <View style={styles.buttonContainer}>
               <View style={styles.button}>

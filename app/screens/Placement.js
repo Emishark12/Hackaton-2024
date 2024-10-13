@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { quizData } from '../constants/QuizContent'; // Import the quiz data
 
 const CourseProgress = () => {
   const navigation = useNavigation();
+  const route = useRoute(); // Access route parameters
+  const { courseId } = route.params; // Destructure courseId from route parameters
+
   const [hasPriorKnowledge, setHasPriorKnowledge] = useState(null);
   const [selectedAnswers, setSelectedAnswers] = useState({});
   const [showFeedback, setShowFeedback] = useState(false);
@@ -13,71 +17,9 @@ const CourseProgress = () => {
   const [quizCompleted, setQuizCompleted] = useState(false);
 
   const courseName = 'Introducción a las Finanzas Personales';
-  const totalSteps = 5;
-  
-  const quizSteps = [
-    [
-      {
-        question: '¿Cuál es el primer paso para organizar tus finanzas?',
-        options: ['Crear un presupuesto', 'Invertir en la bolsa', 'Ahorrar para la jubilación', 'Comprar una casa'],
-        correctAnswer: 'Crear un presupuesto'
-      },
-      {
-        question: '¿Qué porcentaje de tus ingresos deberías ahorrar?',
-        options: ['5%', '10%', '20%', '30%'],
-        correctAnswer: '20%'
-      }
-    ],
-    [
-      {
-        question: '¿Qué es un activo?',
-        options: ['Una deuda', 'Un ingreso', 'Un bien que genera ingresos', 'Un gasto innecesario'],
-        correctAnswer: 'Un bien que genera ingresos'
-      },
-      {
-        question: '¿Qué significa diversificar tu inversión?',
-        options: ['Invertir en un solo lugar', 'No invertir nada', 'Invertir en diferentes sectores', 'Gastar todo'],
-        correctAnswer: 'Invertir en diferentes sectores'
-      }
-    ],
-    [
-      {
-        question: '¿Cuál es la principal diferencia entre ahorro e inversión?',
-        options: ['El ahorro es para emergencias, la inversión genera rendimiento', 'El ahorro no es seguro', 'La inversión es a corto plazo', 'El ahorro genera más dinero'],
-        correctAnswer: 'El ahorro es para emergencias, la inversión genera rendimiento'
-      },
-      {
-        question: '¿Qué herramienta puedes usar para controlar tus gastos?',
-        options: ['Una cuenta bancaria', 'Un presupuesto', 'Un préstamo', 'Una tarjeta de crédito'],
-        correctAnswer: 'Un presupuesto'
-      }
-    ],
-    [
-      {
-        question: '¿Qué es el interés compuesto?',
-        options: ['Interés generado sobre el capital inicial', 'Interés generado sobre intereses previos', 'Un tipo de interés bajo', 'Interés generado solo por los bancos'],
-        correctAnswer: 'Interés generado sobre intereses previos'
-      },
-      {
-        question: '¿Cuál es la regla del 50/30/20?',
-        options: ['50% ahorro, 30% gastos fijos, 20% ocio', '50% necesidades, 30% deseos, 20% ahorro', '50% inversión, 30% deuda, 20% ahorro', '50% ocio, 30% necesidades, 20% ahorro'],
-        correctAnswer: '50% necesidades, 30% deseos, 20% ahorro'
-      }
-    ],
-    [
-      {
-        question: '¿Cuál es la diferencia entre un préstamo personal y una hipoteca?',
-        options: ['La hipoteca es para la casa, el préstamo personal puede ser para cualquier cosa', 'El préstamo personal tiene intereses más bajos', 'La hipoteca es a corto plazo', 'El préstamo personal no requiere garantía'],
-        correctAnswer: 'La hipoteca es para la casa, el préstamo personal puede ser para cualquier cosa'
-      },
-      {
-        question: '¿Qué debes hacer antes de invertir en algo?',
-        options: ['Pedir un préstamo', 'Evaluar los riesgos', 'Invertir todo tu dinero', 'Comprar una casa'],
-        correctAnswer: 'Evaluar los riesgos'
-      }
-    ]
-  ];
+  const totalSteps = quizData.length;
 
+  const quizSteps = quizData;
   const quizAnswers = quizSteps[currentStep];
 
   const steps = Array.from({ length: totalSteps }, (_, i) => ({
@@ -107,12 +49,12 @@ const CourseProgress = () => {
   };
 
   const handleCreatePersonalizedCourse = () => {
-    navigation.navigate('Modulo');
+    navigation.navigate('Modulo', { courseId }); // Pass courseId to Modulo
   };
 
   const handleKnowledgeCheck = (answer) => {
     if (answer === 'No') {
-      navigation.navigate('Modulo');
+      navigation.navigate('Modulo', { courseId }); // Pass courseId to Modulo
     } else {
       setHasPriorKnowledge(true);
     }
@@ -207,6 +149,7 @@ const CourseProgress = () => {
     </ScrollView>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {

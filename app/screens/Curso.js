@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   },
   backButton: {
     marginBottom: 10,
+    borderRadius: 4,
   },
   title: {
     fontSize: 24,

@@ -10,8 +10,6 @@ export default class Configuracion extends React.Component {
   toggleSwitch = switchNumber => this.setState({ [switchNumber]: !this.state[switchNumber] });
 
   renderItem = ({ item }) => {
-    const {navigate} = this.props.navigation;
-
     switch(item.type) {
       case 'switch': 
         return (
@@ -29,7 +27,7 @@ export default class Configuracion extends React.Component {
       case 'button': 
         return (
           <Block style={styles.rows}>
-            <TouchableOpacity onPress={() => navigate('Pro')}>
+            <TouchableOpacity>
               <Block row middle space="between" style={{paddingTop:7}}>
                 <Text size={14}>{item.title}</Text>
                 <Icon name="angle-right" family="font-awesome" style={{ paddingRight: 5 }} />
@@ -42,21 +40,21 @@ export default class Configuracion extends React.Component {
   }
 
   render() {
-    const recommended = [
-      { title: "Use FaceID to sign in", id: "face", type: "switch" },
-      { title: "Auto-Lock security", id: "autolock", type: "switch" },
-      { title: "Notifications", id: "Notifications", type: "button" },
+    const configuracionesRecomendadas = [
+      { title: "Usar FaceID para iniciar sesión", id: "face", type: "switch" },
+      { title: "Bloqueo automático de seguridad", id: "autolock", type: "switch" },
+      { title: "Notificaciones", id: "notificaciones", type: "button" },
     ];
 
-    const payment = [
-      { title: "Manage Payment Options", id: "Payment", type: "button" },
-      { title: "Manage Gift Cards", id: "gift", type: "button" },
+    const configuracionesPago = [
+      { title: "Conoce nuestras tarjetas", id: "pago", type: "button" },
+      { title: "Abrir una cuenta de ahorro", id: "regalo", type: "button" },
     ];
     
-    const privacy = [
-      { title: "User Agreement", id: "Agreement", type: "button" },
-      { title: "Privacy", id: "Privacy", type: "button" },
-      { title: "About", id: "About", type: "button" },
+    const configuracionesPrivacidad = [
+      { title: "Acuerdo de usuario", id: "acuerdo", type: "button" },
+      { title: "Privacidad", id: "privacidad", type: "button" },
+      { title: "Acerca de", id: "acerca", type: "button" },
     ];
 
     return (
@@ -64,48 +62,47 @@ export default class Configuracion extends React.Component {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.Configuracion}>
         <FlatList
-          data={recommended}
+          data={configuracionesRecomendadas}
           keyExtractor={(item, index) => item.id}
           renderItem={this.renderItem}
           ListHeaderComponent={
             <Block style={styles.title}>
-              <Text bold center size={theme.SIZES.BASE} style={{ paddingBottom: 5 }}>
-                Recommended Configuracion
+              <Text bold size={theme.SIZES.BASE} style={styles.headerText}>
+                Configuraciones recomendadas
               </Text>
-              <Text center muted size={12}>
-                These are the most important Configuracion
+              <Text muted size={12} style={styles.descriptionText}>
+                Ajusta las configuraciones esenciales para aprovechar BanorTeach al máximo.
               </Text>
             </Block>
           }
         />
         <Block style={styles.title}>
-          <Text bold center size={theme.SIZES.BASE} style={{ paddingBottom: 5 }}>
-          Payment Configuracion
+          <Text bold size={theme.SIZES.BASE} style={styles.headerText}>
+            Configuraciones de pago
           </Text>
-          <Text center muted size={12}>
-          These are also important Configuracion
+          <Text muted size={12} style={styles.descriptionText}>
+            Administra tus opciones de pago y finanzas fácilmente.
           </Text>
         </Block>
         <FlatList
-          data={payment}
+          data={configuracionesPago}
           keyExtractor={(item, index) => item.id}
           renderItem={this.renderItem}
         />
         <Block style={styles.title}>
-          <Text bold center size={theme.SIZES.BASE} style={{ paddingBottom: 5 }}>
-          Privacy Configuracion
+          <Text bold size={theme.SIZES.BASE} style={styles.headerText}>
+            Configuraciones de privacidad
           </Text>
-          <Text center muted size={12}>
-          Third most important Configuracion
+          <Text muted size={12} style={styles.descriptionText}>
+            Ajusta la seguridad y privacidad de tu cuenta.
           </Text>
         </Block>
         <FlatList
-          data={privacy}
+          data={configuracionesPrivacidad}
           keyExtractor={(item, index) => item.id}
           renderItem={this.renderItem}
         />
       </View>
-      
     );
   }
 }
@@ -122,5 +119,14 @@ const styles = StyleSheet.create({
     height: theme.SIZES.BASE * 2,
     paddingHorizontal: theme.SIZES.BASE,
     marginBottom: theme.SIZES.BASE / 2,
+  },
+  headerText: {
+    paddingBottom: 5,
+    textAlign: 'left',
+    marginHorizontal: 20,
+  },
+  descriptionText: {
+    textAlign: 'left',
+    marginHorizontal: 20,
   }
 });

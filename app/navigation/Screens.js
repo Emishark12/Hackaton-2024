@@ -9,7 +9,7 @@ import HomeScreen from "../screens/Cursos";
 import OnboardingScreen from "../screens/RegisterScreen";
 import ProfileScreen from "../screens/Profile";
 import ConfiguracionScreen from "../screens/Configuracion";
-import FinancialCoachScreen from "../screens/FinancialCoach";
+import PointsScreen from "../screens/Mis Puntos";
 import Historia from "../screens/Historia"; // Adjust the path as needed
 import Cursos from "../screens/Cursos";
 import Curso from "../screens/Curso";
@@ -18,6 +18,7 @@ import ModuloScreen from "../screens/Modulo"; // Import your Modulo screen
 import React from "react";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
+import CourseProgress from "../screens/Placement";
 
 const { width } = Dimensions.get("screen");
 
@@ -32,17 +33,17 @@ const profile = {
   rating: 22,
 };
 
-function FinCoachStack(props) {
+function PointsStack(props) {
   return (
     <Stack.Navigator
-      initialRouteName="FinancialCoach"
+      initialRouteName="Mis Puntos"
       screenOptions={{
         headerShown: false,
       }}
     >
       <Stack.Screen
-        name="FinancialCoach"
-        component={FinancialCoachScreen}
+        name="Mis Puntos"
+        component={PointsScreen}
       />
     </Stack.Navigator>
   );
@@ -129,6 +130,7 @@ function PlacementStack(props) {
       <Stack.Screen
         name="Placement"
         component={PlacementScreen}
+        // Ensure you're passing any parameters needed here
       />
     </Stack.Navigator>
   );
@@ -145,10 +147,14 @@ function ModuloStack(props) {
       <Stack.Screen
         name="Modulo"
         component={ModuloScreen}
+        // Pass parameters from props.route.params to the Modulo screen
+        initialParams={props.route.params} // Pass parameters if needed
       />
       <Stack.Screen
         name="Historia"
-        component={Historia} // Add the Historia screen here
+        component={Historia}
+        // Pass the same parameters to Historia
+        initialParams={props.route.params} // Pass the same parameters as Modulo
       />
     </Stack.Navigator>
   );
@@ -199,8 +205,8 @@ function AppStack(props) {
         }}
       />
       <Drawer.Screen
-        name="Coach Financiero"
-        component={FinCoachStack}
+        name="Mis Puntos"
+        component={PointsStack}
         options={{
           drawerIcon: ({ focused }) => (
             <Icon
@@ -257,7 +263,7 @@ function AppStack(props) {
       />
       <Drawer.Screen
         name="Placement"
-        component={PlacementStack}
+        component={CourseProgress}
         options={{
           drawerIcon: ({ focused }) => (
             <Icon

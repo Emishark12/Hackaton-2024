@@ -26,11 +26,11 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : materialTheme.COLORS.MUTED}
           />
         );
-      case "Coach Financiero":
+      case "Mis Puntos":
         return (
           <Icon
             size={16}
-            name="lightbulb"
+            name="stars"
             family="material"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
           />

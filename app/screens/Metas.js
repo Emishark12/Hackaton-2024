@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, FlatList, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 
 renderTabs = () => {
@@ -7,18 +7,18 @@ renderTabs = () => {
 
   return (
     <Block row style={styles.tabs}>
-      <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Cursos')}>
+      <TouchableOpacity style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Cursos')}>
         <Block row middle>
           <Ionicons name="book-outline" size={16} style={{ paddingRight: 8 }} />
           <Text size={16} style={styles.tabTitle}>Cursos</Text>
         </Block>
-      </Button>
-      <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Mis Metas')}>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('Mis Metas')}>
         <Block row middle>
           <Ionicons name="trending-up-outline" size={16} style={{ paddingRight: 8 }} />
           <Text size={16} style={styles.tabTitle}>Mis Metas</Text>
         </Block>
-      </Button>
+      </TouchableOpacity>
     </Block>
   )
 }
@@ -42,7 +42,6 @@ const Metas = () => {
           progress: 0,
         },
       ]);
-      // Reset the input fields
       setTitle('');
       setAmount('');
       setShowDatePicker(false);
@@ -78,7 +77,9 @@ const Metas = () => {
         keyboardType="numeric"
         style={styles.input}
       />
-      <Button title="Seleccionar Fecha de Vencimiento" onPress={() => setShowDatePicker(true)} color="#EB0029" />
+      <TouchableOpacity style={styles.button} onPress={() => setShowDatePicker(true)}>
+        <Text style={styles.buttonText}>Seleccionar Fecha de Vencimiento</Text>
+      </TouchableOpacity>
       {showDatePicker && (
         <DateTimePicker
           value={dueDate}
@@ -90,9 +91,9 @@ const Metas = () => {
           }}
         />
       )}
-      <View style={styles.buttonContainer}>
-        <Button title="Agregar Meta" onPress={addGoalHandler} color="#EB0029" />
-      </View>
+      <TouchableOpacity style={styles.button} onPress={addGoalHandler}>
+        <Text style={styles.buttonText}>Agregar Meta</Text>
+      </TouchableOpacity>
 
       <FlatList
         data={MetasList}
@@ -109,9 +110,9 @@ const Metas = () => {
               style={styles.progressInput}
               onChangeText={(progress) => updateProgressHandler(item.id, progress)}
             />
-            <View style={styles.buttonContainer}>
-              <Button title="Eliminar" onPress={() => deleteGoalHandler(item.id)} color="#EB0029" />
-            </View>
+            <TouchableOpacity style={styles.button} onPress={() => deleteGoalHandler(item.id)}>
+              <Text style={styles.buttonText}>Eliminar</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
@@ -123,38 +124,53 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f8f8',
   },
   title: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: '#333',
   },
   input: {
     borderColor: '#ccc',
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    borderRadius: 8,
+    backgroundColor: '#fff',
   },
   progressInput: {
     borderColor: '#ccc',
     borderWidth: 1,
     padding: 10,
     marginBottom: 10,
+    borderRadius: 8,
     width: '60%',
+    backgroundColor: '#fff',
   },
   goalItem: {
-    flexDirection: 'column',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderColor: '#ccc',
+    padding: 15,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    marginBottom: 15,
+  },
+  button: {
+    backgroundColor: '#EB0029',
+    padding: 12,
+    borderRadius: 14,
+    alignItems: 'center',
     marginBottom: 10,
   },
-  buttonContainer: {
-    marginTop: 10,
-    marginBottom: 10,
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

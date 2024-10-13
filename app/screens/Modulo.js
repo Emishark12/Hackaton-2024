@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import { View, Text, Button, ActivityIndicator, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Theme from '../constants/Theme';
+import { CourseContent } from '../constants/CourseContent'; // Ensure this is the correct import
 
-const Modulo = ({ navigation }) => {
+const Modulo = ({ route, navigation }) => {
+  const { courseId } = route.params;  // Get courseId from navigation params
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [pointsEarned, setPointsEarned] = useState(0);
-
-  const texts = [
-    "Bienvenido al curso sobre Finanzas Personales. En este curso, aprenderás los fundamentos de cómo manejar tu dinero de manera efectiva.",
-    "El primer paso en la gestión de tus finanzas es crear un presupuesto. Un presupuesto te ayuda a planificar tus gastos y a ahorrar para tus objetivos.",
-    "Ahora que tienes un presupuesto, es importante seguirlo. Revisa tus gastos mensualmente para asegurarte de que te mantienes dentro de tu presupuesto.",
-    "Una buena práctica es reservar una parte de tus ingresos para un fondo de emergencia. Esto te ayudará a estar preparado para imprevistos.",
-    "¡Felicidades! Has completado este módulo. Ahora estás listo para poner en práctica lo aprendido.",
-  ];
+  
+  // Safeguard against undefined course
+  const course = CourseContent[courseId]; // Get the course object
+  if (!course) {
+    return (
+      <View style={styles.container}>
+        <Text>Course not found.</Text>  // Handle course not found
+      </View>
+    );
+  }
 
   const continueHandler = () => {
-    if (currentTextIndex < texts.length - 1) {
+    if (currentTextIndex < course.content.length - 1) {
       setCurrentTextIndex(currentTextIndex + 1);
     } else {
       setPointsEarned(100);
@@ -32,14 +36,18 @@ const Modulo = ({ navigation }) => {
       <TouchableOpacity onPress={backHandler} style={styles.backButton}>
         <Ionicons name="arrow-back" size={24} color="#EB0029" />
       </TouchableOpacity>
-      <Text style={styles.title}>Curso de Finanzas Personales</Text>
-      <Text style={styles.content}>{texts[currentTextIndex]}</Text>
+      <Text style={styles.title}>{course.title}</Text>
+      <Text style={styles.content}>{course.content[currentTextIndex]}</Text>
       {pointsEarned > 0 && (
         <Text style={styles.pointsMessage}>¡Ganaste {pointsEarned} puntos!</Text>
       )}
       <View style={styles.buttonContainer}>
-        {currentTextIndex === texts.length - 1 ? (
-          <Button title="Mi historia" onPress={() => navigation.navigate('Historia')} color="#EB0029" />
+        {currentTextIndex === course.content.length - 1 ? (
+          <Button 
+            title="Mi historia" 
+            onPress={() => navigation.navigate('Historia', { cursoActual: course })} // Pass the current course
+            color="#EB0029" 
+          />
         ) : (
           <Button title="Continuar" onPress={continueHandler} color="#EB0029" />
         )}

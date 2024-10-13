@@ -17,7 +17,7 @@ function CustomDrawerContent({
   const insets = useSafeArea();
   const screens = [
     "Cursos",
-    "Coach Financiero",
+    "Mis Puntos",
     "Mis Metas",
     "Configuracion"
   ];
@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4E4044',
     paddingHorizontal: 28,
     justifyContent: 'center',
+    height: 100,
   },
   profile: {
     marginBottom: theme.SIZES.BASE / 4,
@@ -89,5 +90,6 @@ const styles = StyleSheet.create({
     marginRight: theme.SIZES.BASE,
   },
 });
+
 
 export default CustomDrawerContent;
